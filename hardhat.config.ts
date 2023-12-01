@@ -2,7 +2,8 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 require("dotenv").config();
 const PRIVATE_KEY = process.env.PRIVATE_KEY ?? "";
-
+const API = process.env.API ?? "";
+console.log(PRIVATE_KEY, API)
 
 const config: HardhatUserConfig = {
   solidity: "0.8.20",
@@ -13,6 +14,9 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       url: "https://polygon-testnet.public.blastapi.io/", // Remplacez par la clé privée de votre compte Ethereum
     },
+  },
+  etherscan: {
+    apiKey: API,
   },
 };
 export default config;

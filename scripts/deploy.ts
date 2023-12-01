@@ -19,6 +19,7 @@ async function main() {
   await smart.waitForDeployment()
 
   console.log("Smart contract deployed to:", await smart.getAddress());
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
