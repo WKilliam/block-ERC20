@@ -1,5 +1,5 @@
-// Importe le contrat du token ERC20 défini dans un fichier "token.sol"
-import "./token.sol";
+// Importe le contrat du token ERC20 défini dans un fichier "TokenERC20.sol"
+import "./TokenERC20.sol";
 
 // Importe la bibliothèque SafeMath d'OpenZeppelin pour les opérations mathématiques sécurisées
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
