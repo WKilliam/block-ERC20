@@ -8,6 +8,31 @@ require('dotenv').config();
 
 const { API_URL, PRIVATE_KEY, POLYGONSCAN_API_KEY } = process.env;
 
+task("deploy-and-verify", "Deploys and verifies contracts on Polygonscan")
+    .addParam("contractname", "The name of the contract to deploy")
+    .setAction(async (taskArgs, hre) => {
+        const { ethers, run } = hre;
+
+        const [deployer] = await ethers.getSigners();
+        console.log("Deploying contracts with the account:", deployer.address);
+
+        const ContractFactory = await ethers.getContractFactory(taskArgs.contractname);
+        const contract = await ContractFactory.deploy(/* arguments */);
+        await contract.deployed();
+
+        console.log("Contract address:", contract.address);
+
+        try {
+            await run("verify", {
+                address: contract.address,
+            });
+
+            console.log("Contract verified on Polygonscan");
+        } catch (error) {
+            console.error("Error verifying contract on Polygonscan:", error.message);
+        }
+    });
+
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {

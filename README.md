@@ -14,7 +14,9 @@ npm install
 ```
 
 # Token publiés et déployés: 
-https://mumbai.polygonscan.com/address/0x908C79d78544ffF5ba4AD828A5E518030b006141#code
+MyToken : https://mumbai.polygonscan.com/address/0x908C79d78544ffF5ba4AD828A5E518030b006141#code
+
+
 
 # Tester les tokens :
 ```shell

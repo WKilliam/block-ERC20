@@ -62,10 +62,10 @@ contract MyCrowdsale is Ownable {
     function buyTokens(address beneficiary) public payable onlyWhileOpen onlyNotFinalized {
         require(beneficiary != address(0), "Adresse invalide.");
         require(msg.value >= minPurchase && msg.value <= maxPurchase, "Montant d'achat invalide.");
-        
+
         uint256 weiAmount = msg.value;
         uint256 tokens = weiAmount.mul(rate);
-        
+
         // Check if the purchase exceeds the hard cap
         require(tokensSold().add(tokens) <= hardCap, "L'achat depasse le hard cap.");
 
@@ -78,7 +78,7 @@ contract MyCrowdsale is Ownable {
 
     function finalize() external onlyOwner {
         require(!isFinalized, "La levee de fonds est deja finalisee.");
-        
+
         // Transfer collected ETH to the owner
         payable(owner()).transfer(address(this).balance);
 

@@ -10,19 +10,26 @@ describe("MyCrowdsale", function () {
     const myToken = await MyToken.deploy();
     await myToken.deployed();
 
+    // Set startTime to be 1 hour from now and endTime to be 2 hours from now
+    const startTime = Math.floor(Date.now() / 1000) + 3600;
+    const endTime = Math.floor(Date.now() / 1000) + 7200;
+
     const MyCrowdsale = await ethers.getContractFactory("MyCrowdsale");
     const myCrowdsale = await MyCrowdsale.deploy(
-      myToken.address,
-      100, // rate
-      1, // minPurchase
-      10, // maxPurchase
-      100, // hardCap
-      Math.floor(Date.now() / 1000) + 3600, // startTime
-      Math.floor(Date.now() / 1000) + 7200 // endTime
+        myToken.address,
+        100, // rate
+        1, // minPurchase
+        10, // maxPurchase
+        100, // hardCap
+        startTime,
+        endTime
     );
     await myCrowdsale.deployed();
 
     await myToken.mint(myCrowdsale.address, 1000);
+
+    // Fast-forward time to make sure the crowdsale is open
+    await ethers.provider.send("evm_setNextBlockTimestamp", [startTime + 600]);
 
     const initialBalance = await myToken.balanceOf(buyer.address);
 
