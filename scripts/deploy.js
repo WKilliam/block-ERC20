@@ -11,16 +11,20 @@ async function main() {
   console.log("MyToken deployed to:", myToken.address);
 
   const MyCrowdsale = await ethers.getContractFactory("MyCrowdsale");
+  console.log(Date.now());
+  console.log(myToken.address);
   const myCrowdsale = await MyCrowdsale.deploy(
     myToken.address,
     100, // rate
     1, // minPurchase
     10, // maxPurchase
     100, // hardCap
-    Math.floor(Date.now() / 1000) + 3600, // startTime
-    Math.floor(Date.now() / 1000) + 7200 // endTime
+    Math.floor(1701443035724 / 1000) + 3600, // startTime
+    Math.floor(1701443035724 / 1000) + 7200 // endTime
   );
   await myCrowdsale.deployed();
+  console.log(  Math.floor(1701443035724 / 1000) + 3600);
+  console.log( Math.floor(1701443035724 / 1000) + 7200);
   console.log("MyCrowdsale deployed to:", myCrowdsale.address);
 
   // Mint some initial tokens for testing

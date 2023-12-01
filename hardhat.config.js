@@ -8,6 +8,10 @@ require('dotenv').config();
 
 const { API_URL, PRIVATE_KEY, POLYGONSCAN_API_KEY } = process.env;
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 task("deploy-and-verify", "Deploys and verifies contracts on Polygonscan")
     .addParam("contractname", "The name of the contract to deploy")
     .setAction(async (taskArgs, hre) => {
@@ -23,6 +27,8 @@ task("deploy-and-verify", "Deploys and verifies contracts on Polygonscan")
         console.log("Contract address:", contract.address);
 
         try {
+            await sleep(10000);
+
             await run("verify", {
                 address: contract.address,
             });
@@ -46,6 +52,6 @@ module.exports = {
     version: "0.8.0",
   },
   etherscan: {
-    apiKey: POLYGONSCAN_API_KEY
+      apiKey: POLYGONSCAN_API_KEY
  },
 };
