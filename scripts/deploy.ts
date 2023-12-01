@@ -1,22 +1,24 @@
 import { ethers } from "hardhat";
+import {TokenERC20} from "../typechain-types";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const Token = await ethers.getContractFactory("TokenERC20");
+  const token = await Token.deploy("BearManCoin", "BMC");
+// Attendez que le contrat TokenERC20 soit déployé
+  const tkAdress = await token.waitForDeployment();
 
-  const lockedAmount = ethers.parseEther("0.001");
+  console.log("TokenERC20 contract deployed to:", await tkAdress.getAddress());
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+  const Smart = await ethers.getContractFactory("Smart");
+  const smart = await Smart.deploy(
+      tkAdress.getAddress(),
+      ethers.parseEther("1000")
   );
+
+  // Attendez que le contrat Smart soit déployé
+  await smart.waitForDeployment()
+
+  console.log("Smart contract deployed to:", await smart.getAddress());
 }
 
 // We recommend this pattern to be able to use async/await everywhere
