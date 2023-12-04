@@ -70,14 +70,14 @@ contract MyCrowdsale is Ownable {
         uint256 tokens = weiAmount.mul(rate);
 
         // Check if the purchase exceeds the hard cap
-        console.log(hardCap);
+        //console.log(hardCap);
         require(tokenSold.add(tokens) <= hardCap, "L'achat depasse le hard cap.");
 
         // Transfer tokens to the beneficiary
         token.transfer(beneficiary, tokens);
 
         tokenSold += tokens;
-        
+
         // Emit the purchase event
         emit TokensPurchased(beneficiary, tokens, weiAmount);
     }
