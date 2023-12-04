@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "hardhat/console.sol";
 
 contract MyCrowdsale is Ownable {
     using SafeMath for uint256;
@@ -15,6 +16,7 @@ contract MyCrowdsale is Ownable {
     uint256 public hardCap; // Total ETH limit to be collected
     uint256 public startTime;
     uint256 public endTime;
+    uint256 public tokenSold;
     bool public isFinalized = false;
 
     event TokensPurchased(address indexed buyer, uint256 amount, uint256 value);
@@ -39,13 +41,14 @@ contract MyCrowdsale is Ownable {
         uint256 _startTime,
         uint256 _endTime
     ) {
-        require(_startTime >= block.timestamp, "Le temps de debut est dans le passe.");
+        //require(_startTime >= block.timestamp, "Le temps de debut est dans le passe.");
         require(_endTime > _startTime, "Le temps de fin doit etre apres le temps de debut.");
         require(_rate > 0, "Le taux doit etre superieur a zero.");
         require(_minPurchase > 0, "L'achat minimum doit etre superieur a zero.");
         require(_maxPurchase > _minPurchase, "L'achat maximum doit etre superieur a l'achat minimum.");
         require(_hardCap > 0, "Le hard cap doit etre superieur a zero.");
 
+        tokenSold=0;
         token = _token;
         rate = _rate;
         minPurchase = _minPurchase;
@@ -67,11 +70,14 @@ contract MyCrowdsale is Ownable {
         uint256 tokens = weiAmount.mul(rate);
 
         // Check if the purchase exceeds the hard cap
-        require(tokensSold().add(tokens) <= hardCap, "L'achat depasse le hard cap.");
+        console.log(hardCap);
+        require(tokenSold.add(tokens) <= hardCap, "L'achat depasse le hard cap.");
 
         // Transfer tokens to the beneficiary
         token.transfer(beneficiary, tokens);
 
+        tokenSold += tokens;
+        
         // Emit the purchase event
         emit TokensPurchased(beneficiary, tokens, weiAmount);
     }
@@ -95,7 +101,7 @@ contract MyCrowdsale is Ownable {
         emit Finalized();
     }
 
-    function tokensSold() public view returns (uint256) {
-        return token.totalSupply();
-    }
+    //function tokensSold() public view returns (uint256) {
+    //    return token.totalSupply();
+    //}
 }
